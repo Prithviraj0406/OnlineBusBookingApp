@@ -6,8 +6,10 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.cg.dto.BusDto;
+
 import com.cg.dto.BusOperatorDto;
 import com.cg.dto.BusRouteDto;
+import com.cg.dto.BusRouteDto3;
 import com.cg.entity.Bus10;
 import com.cg.entity.BusOperator10;
 import com.cg.entity.BusRoute10;
@@ -41,5 +43,16 @@ public interface IBusOperatorService {
 	public List<Float> getRevenueByBusRouteAndDate(String routeName, LocalDate date);
 
 	public List<Float> getYearlyRevenueByBusRoute(String routeName, int year);
+	
+	public boolean validateOperator(BusOperatorDto busoperator);
+	
+	public List<BusRoute10> getBusRoutes();
+	
+	
+
+	//public List<String> getAllSource();
+	
+	//public List<String> getAllDestination();
+	
 
 }

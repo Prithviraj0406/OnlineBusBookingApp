@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,6 +22,8 @@ import com.cg.dto.BookingDto;
 import com.cg.dto.BusDto;
 import com.cg.dto.BusOperatorDto;
 import com.cg.dto.BusRouteDto;
+import com.cg.dto.UserDto;
+import com.cg.entity.BusRoute10;
 import com.cg.exception.BusOperatorValidationException;
 import com.cg.exception.InvalidBusOperatorException;
 import com.cg.exception.InvalidRouteNameException;
@@ -34,7 +37,7 @@ import com.cg.service.BusOperatorServiceImpl;
  *
  *Created Date : 20 April 2021
  */
-
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping(value = "/busoperator")
 
@@ -247,8 +250,8 @@ public class BusOperatorController {
 	 * Created Date : 22 April 2021
 	 */
 
-	@PutMapping(value = "/updatePassword/{UserName}")
-	public ResponseEntity<Object> updatepassword(@Valid @PathVariable String UserName, @RequestBody String password,
+	@PutMapping(value = "/updatePassword")
+	public ResponseEntity<Object> updatepassword(@Valid @RequestBody BusOperatorDto busoperator,
 			BindingResult bindingresult) {
 		if (bindingresult.hasErrors()) {
 			System.out.println("Some errors exist!");
@@ -262,7 +265,7 @@ public class BusOperatorController {
 
 		}
 		try {
-			busoperatorserviceimpl.updatePassword(UserName, password);
+			busoperatorserviceimpl.updatePassword(busoperator.getBusOperatorUsername(), busoperator.getPassword());
 		}
 
 		catch (InvalidBusOperatorException exception) {
@@ -305,5 +308,18 @@ public class BusOperatorController {
 		}
 		return new ResponseEntity<Object>("Added successfully", HttpStatus.CREATED);
 	}
+	
+	
 
+	@PutMapping(value="/validate")
+	public boolean validateUser(@Valid @RequestBody BusOperatorDto busoperator) {
+		return busoperatorserviceimpl.validateOperator(busoperator);
+	}
+	
+	//@GetMapping(value = "/getBusRoute")
+	//public List<BusRoute10> getBusRoute(){
+	//		return busoperatorserviceimpl.getBusRoutes();
+	//}
+	
+	
 }

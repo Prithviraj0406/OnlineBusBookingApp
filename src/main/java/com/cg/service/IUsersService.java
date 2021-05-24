@@ -27,6 +27,8 @@ public interface IUsersService {
 	
 	public void updatePassword(String username,String newPassword);
 	
+	public boolean validateUser(UserDto userdto);
+	
 	
 
 	

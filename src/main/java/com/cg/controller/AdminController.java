@@ -6,8 +6,11 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,12 +18,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cg.dto.AdminDto;
+import com.cg.dto.BusRouteDto;
+import com.cg.dto.BusRouteDto2;
 import com.cg.entity.Admin10;
 import com.cg.entity.Booking10;
 import com.cg.entity.BusOperator10;
+import com.cg.entity.BusRoute10;
 import com.cg.entity.User10;
 import com.cg.exception.IdNotFoundException;
 import com.cg.exception.InvalidBusOperatorException;
@@ -40,9 +47,9 @@ import io.swagger.annotations.Api;
  * Created date: 21-04-2021
  * 
  ******************************************************************/
-
-@RestController
+@CrossOrigin(origins = "*")
 @Api(value = "Admin API")
+@RestController
 @RequestMapping(value = "/OnlineBusBooking/admin")
 public class AdminController 
 {
@@ -50,7 +57,7 @@ public class AdminController
 	AdminServiceImpl adminService;
 	
 	@PostMapping(value="/addAdmin")
-	public Admin10 addAdmin(@Valid @RequestBody AdminDto admindto, BindingResult bindingresult) 
+	public ResponseEntity<Object> addAdmin(@Valid @RequestBody AdminDto admindto, BindingResult bindingresult) 
 	{
 		if (bindingresult.hasErrors()) {
 			System.out.println("Some errors exist!");
@@ -65,7 +72,8 @@ public class AdminController
 		}
 		
 		try{
-			return adminService.addAdmin(admindto);
+			adminService.addAdmin(admindto);
+			return new ResponseEntity<Object>("Admin Registered successfully",HttpStatus.OK);
 		}
 		catch (InvalidBusOperatorException exception) {
 			throw new InvalidBusOperatorException("one or more entered field contains invalid object");
@@ -95,8 +103,8 @@ public class AdminController
 	
 	
 	
-	@PutMapping(value="/updateRouteName/{busId}")
-	public void updateBusRoute(@Valid @PathVariable int busId, @RequestBody String newBusRoute, BindingResult bindingresult)
+	@PutMapping(value="/updateRouteName")
+	public ResponseEntity<Object> updateBusRoute(@Valid @RequestBody BusRouteDto2 BusRoute, BindingResult bindingresult)
 	{
 		if (bindingresult.hasErrors()) {
 			System.out.println("Some errors exist!");
@@ -111,12 +119,13 @@ public class AdminController
 		}
 		
 		try{
-			adminService.updateBusRoute(busId, newBusRoute);
+			adminService.updateBusRoute(BusRoute.getBusrouteId(),BusRoute.getRouteName());
 		}
 		catch (InvalidBusOperatorException exception) {
 			throw new InvalidBusOperatorException("one or more entered field contains invalid object");
 
 		}
+		return new ResponseEntity<Object>("Route Name Updated",HttpStatus.OK);
 		
 	}
 	
@@ -156,6 +165,13 @@ public class AdminController
 				throw new InvalidRouteNameException("No such routename was found");
 		}
 	}
+	
+	@PutMapping(value="/validateAdmin")
+	public boolean validateAdmin(@Valid @RequestBody AdminDto admindto)
+	{
+		return adminService.validateAdmin(admindto);
+	}
+	
 	
 //	@GetMapping(value="/singIn")
 //	public AdminUser10 singIn(AdminDto user)

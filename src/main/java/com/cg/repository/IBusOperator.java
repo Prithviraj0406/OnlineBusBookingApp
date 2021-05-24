@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import com.cg.entity.Bus10;
 import com.cg.entity.BusOperator10;
 
 /******************************************************************
@@ -37,5 +38,6 @@ public interface IBusOperator extends JpaRepository<BusOperator10, Integer> {
 
 	@Query("select (b.totalSeats*b.fare )from Bus10 b,BusRoute10 br ,Booking10 bo where b.busRoute=br and lower(br.routeName)=lower(:routeName) and extract (year from bo.datenm)=:year")
 	public List<Float> getYearlyRevenueByBusRoute(@Param("routeName") String routeName, @Param("year") int year);
+	
 
 }

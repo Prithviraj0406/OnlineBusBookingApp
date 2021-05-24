@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,7 +21,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cg.dto.BookingDto;
+import com.cg.dto.BusDto;
+import com.cg.dto.BusRouteDto;
+import com.cg.dto.BusRouteDto3;
+import com.cg.dto.PassengerDto;
 import com.cg.entity.Booking10;
+import com.cg.entity.Bus10;
 import com.cg.entity.Feedback10;
 import com.cg.exception.BookingValidationException;
 import com.cg.exception.IdNotFoundException;
@@ -40,7 +46,7 @@ import io.swagger.annotations.Api;
  * Created date: 21-04-2021
  * 
  ******************************************************************/
-
+@CrossOrigin(origins = "*")
 @RestController
 @Api(value = "Booking API")
 @RequestMapping(value = "/OnlineBusBooking/booking")
@@ -197,9 +203,23 @@ public class BookingController {
 		}
 
 	}
+	
+	@PostMapping(value="/addPassenger")
+	public ResponseEntity<Object> addPassenger(@RequestBody PassengerDto passengerdto) {
 
+		bookingService.addPassenger(passengerdto);
+		return new ResponseEntity<Object>("Booked successfully", HttpStatus.OK);
+	}
 	
+	@GetMapping(value="/getBusRoute/{source}")
+	public ResponseEntity<Object> getBusRoute(@PathVariable String source){
+		return new ResponseEntity<>(bookingService.getBusRoute(source),HttpStatus.OK);
+	}
 	
+	@GetMapping(value="/getFare/{noofseats}/source/{routeName}/busnumber/{busnumber}")
+	public ResponseEntity<Object> getFare(@PathVariable int noofseats,@PathVariable String routeName,@PathVariable String busnumber){
+		return new ResponseEntity<>(bookingService.getFare(noofseats, routeName,busnumber),HttpStatus.OK);
+	}
 	
 	
 	

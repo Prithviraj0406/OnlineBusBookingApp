@@ -1,15 +1,24 @@
 package com.cg.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.transaction.Transactional;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import com.cg.dto.BookingDto;
+import com.cg.dto.BusDto;
+import com.cg.dto.BusRouteDto;
+import com.cg.dto.BusRouteDto3;
+import com.cg.dto.FeedbackDto;
 import com.cg.dto.PassengerDto;
 import com.cg.entity.Booking10;
+import com.cg.entity.Bus10;
+import com.cg.entity.BusRoute10;
 import com.cg.entity.Feedback10;
 import com.cg.entity.Passenger10;
 import com.cg.entity.User10;
@@ -17,6 +26,8 @@ import com.cg.exception.IdNotFoundException;
 import com.cg.exception.InvalidRouteNameException;
 import com.cg.exception.InvalidUsernameException;
 import com.cg.repository.IBookingRepository;
+import com.cg.repository.IBus;
+import com.cg.repository.IBusRoute;
 import com.cg.repository.IFeedBackRepository;
 import com.cg.repository.IPassengerRepository;
 import com.cg.repository.IUserRepository;
@@ -43,6 +54,12 @@ public class BookingServiceImpl implements IBookingService
 	
 	@Autowired
 	IFeedBackRepository feedbackRepository;
+	
+	@Autowired
+	IBusRoute busrouterepository;
+	
+	@Autowired
+	IBus busrepository;
 	
 	
 	/***********************************************************************************
@@ -180,10 +197,42 @@ public class BookingServiceImpl implements IBookingService
 		}
 		
 	}
+	
+	@Autowired
+	IPassengerRepository passengerRepository;
+	
+	@Override
+	public Passenger10 addPassenger(PassengerDto passengerdto) 
+	{
+		Passenger10 passenger = new Passenger10();
+		passenger.setEmail(passengerdto.getEmail());
+		passenger.setFirstName(passengerdto.getFirstName());
+		passenger.setIdentityDocNumber(passengerdto.getIdentityDocNumber());
+		passenger.setLastName(passengerdto.getLastName());
+		passenger.setIdentityDocumentName(passengerdto.getIdentityDocumentName());
+		passenger.setPhoneNumber(passengerdto.getPhoneNumber());
+		passenger.setUsername(passengerdto.getUsername());
+		return passengerRepository.save(passenger);
+		
+
+		
+	}
 
 
-	
-	
+	@Override
+	public List<BusRouteDto> getBusRoute(String source) {
+		return busrouterepository.getBySource(source);
+	}
 
-	
+
+	@Override
+	public int getFare(int noofseats, String routeName,String busnumber) {
+		return busrepository.getFare(noofseats, routeName,busnumber);
+	}
+
 }
+
+	
+	
+
+	

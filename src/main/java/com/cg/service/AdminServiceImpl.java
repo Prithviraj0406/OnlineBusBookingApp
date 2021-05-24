@@ -40,7 +40,7 @@ public class AdminServiceImpl implements IAdminService
 	IBusRoute busRouteRepository;
 	
 	@Autowired
-	IBus busRepository;
+	IBus busrepository;
 
 	@Autowired
 	IUserRepository userRepository;
@@ -138,6 +138,17 @@ public class AdminServiceImpl implements IAdminService
 		
 		return adminRepository.findRevenueByBusRouteRouteName(routeName);
 		
+	}
+
+
+	@Override
+	public boolean validateAdmin(AdminDto admindto) {
+		if(admindto.getAdminUsername().equals("admin") && admindto.getPassword().equals("admin")) {
+		   return true;
+		}
+		else {
+			return false;
+		}
 	}
 	
 	

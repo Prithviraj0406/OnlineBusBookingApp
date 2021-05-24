@@ -12,14 +12,12 @@ import javax.validation.constraints.NotEmpty;
  *********************************************************************/
 
 public class BusOperatorDto {
-	@NotEmpty(message = "username should not be empty")
-	private String userId;
-	@NotEmpty(message = "password should not be empty")
+	private String busOperatorUsername;
 	private String password;
 
-	public BusOperatorDto(String userId, String password) {
+	public BusOperatorDto(String busOperatorUsername, String password) {
 		super();
-		this.userId = userId;
+		this.busOperatorUsername = busOperatorUsername;
 		this.password = password;
 
 	}
@@ -29,12 +27,13 @@ public class BusOperatorDto {
 
 	}
 
-	public String getUserId() {
-		return userId;
+
+	public String getBusOperatorUsername() {
+		return busOperatorUsername;
 	}
 
-	public void setUserId(String userId) {
-		this.userId = userId;
+	public void setBusOperatorUsername(String busOperatorUsername) {
+		this.busOperatorUsername = busOperatorUsername;
 	}
 
 	public String getPassword() {

@@ -28,6 +28,8 @@ public interface IAdminService {
 	public List<Booking10> getAllBookings();
 	
 	public List<User10> getAllUsers();
+	
+	public boolean validateAdmin(AdminDto admindto);
 
 	
 	

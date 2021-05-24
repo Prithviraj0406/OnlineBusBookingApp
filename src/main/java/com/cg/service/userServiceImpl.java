@@ -2,6 +2,7 @@ package com.cg.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.cg.dto.UserDto;
 import com.cg.entity.User10;
@@ -37,6 +38,7 @@ public class userServiceImpl implements IUsersService  {
 	 * Created date: 20 April 2021
 	 * 
 	 */
+	@Transactional
 	@Override
 	public void deleteUser(String username)  
 	{
@@ -104,6 +106,17 @@ public class userServiceImpl implements IUsersService  {
 		
 		user.setPassword(userdto.getPassword());
 		return userRepository.save(user);
+		}
+	}
+
+	@Override
+	public boolean validateUser(UserDto userdto) {
+		User10 user=userRepository.findByUsername(userdto.getUsername());
+		if(user.getUsername().equals(userdto.getUsername())&&(user.getPassword().equals(userdto.getPassword()))) {
+			return true;
+		}
+		else {
+			return false;
 		}
 	}
 

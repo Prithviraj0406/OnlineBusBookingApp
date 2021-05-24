@@ -1,9 +1,11 @@
 package com.cg.service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.transaction.Transactional;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,9 +13,15 @@ import org.springframework.stereotype.Service;
 import com.cg.dto.BusDto;
 import com.cg.dto.BusOperatorDto;
 import com.cg.dto.BusRouteDto;
+import com.cg.dto.BusRouteDto3;
+import com.cg.dto.FeedbackDto;
 import com.cg.entity.Bus10;
 import com.cg.entity.BusOperator10;
 import com.cg.entity.BusRoute10;
+import com.cg.entity.Feedback10;
+import com.cg.entity.User10;
+import com.cg.exception.IdNotFoundException;
+import com.cg.exception.InvalidRouteNameException;
 import com.cg.exception.InvalidUsernameException;
 import com.cg.repository.IBus;
 import com.cg.repository.IBusOperator;
@@ -54,7 +62,7 @@ public class BusOperatorServiceImpl implements IBusOperatorService {
 	public BusOperator10 addBusOperator(BusOperatorDto busoperatordto) {
 		
 		BusOperator10 busoperator = new BusOperator10();
-		busoperator.setBusOperatorUsername(busoperatordto.getUserId());
+		busoperator.setBusOperatorUsername(busoperatordto.getBusOperatorUsername());
 		busoperator.setPassword(busoperatordto.getPassword());
 		return busoperatorRepository.save(busoperator);
 		
@@ -180,5 +188,36 @@ public class BusOperatorServiceImpl implements IBusOperatorService {
 		}
 
 	}
+
+
+	@Override
+	public boolean validateOperator(BusOperatorDto busoperator) {
+		BusOperator10 operator=busoperatorRepository.findByBusOperatorUsername(busoperator.getBusOperatorUsername());
+		if(operator.getBusOperatorUsername().equals(busoperator.getBusOperatorUsername())&&(operator.getPassword().equals(busoperator.getPassword()))) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
+
+	@Override
+	public List<BusRoute10> getBusRoutes() {
+		return busrouteRepository.findAll();
+	}
+	
+	/*@Override
+	public List<String> getAllSource() {
+		return busrouteRepository.getAllSource();
+	}
+
+
+	@Override
+	public List<String> getAllDestination() {
+		// TODO Auto-generated method stub
+		return busrouteRepository.getAllDestination();
+	}*/
+
 	
 }
